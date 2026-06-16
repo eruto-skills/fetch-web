@@ -1,0 +1,21 @@
+{
+  "name": "fetch-web",
+  "description": "Fetch web page content as Markdown using a tiered strategy: r.jina.ai (primary), headless Chrome with Puppeteer (fallback), direct curl (last resort). Shared utility referenced by other skills.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Eruto Kondo",
+    "email": "erutobusiness@gmail.com"
+  },
+  "homepage": "https://github.com/eruto-skills/fetch-web",
+  "repository": "https://github.com/eruto-skills/fetch-web",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "claude-code-skill",
+    "fetch",
+    "web",
+    "markdown",
+    "jina",
+    "puppeteer"
+  ]
+}
