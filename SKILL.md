@@ -1,3 +1,15 @@
+---
+name: fetch-web
+description: >
+  WebページのコンテンツをMarkdownで取得する共通フェッチユーティリティ。
+  r.jina.ai（主）→ headless Chrome with Puppeteer（フォールバック）→ direct curl（最終手段）の順で試みる。
+  他スキルから参照される共通戦略として設計されているが、URLのMarkdown取得が必要な場面ではどこでも使える。
+  「このURLの内容を取得して」「URLをMarkdownで」「ページをフェッチ」などで使う。
+user-invocable: true
+allowed-tools: Bash
+argument-hint: "<URL>"
+---
+
 # fetch-web
 
 Web ページのコンテンツを Markdown で取得するユーティリティ。他スキルから参照される共通フェッチ戦略。
