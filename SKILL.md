@@ -54,6 +54,10 @@ JS レンダリング不要のシンプルな HTML サイトのみ有効。
 
 複数 URL を同時取得する場合は Agent subagent を並列で起動する。
 
+## Jina を最初からスキップするサイト
+
+Twitter/X（`x.com` / `twitter.com`）はログインウォールで r.jina.ai が失敗するのが既知。**Jina を試さず、最初からフォールバック（fetch-page.js を Agent 経由）を使う**——失敗してから切り替えるのは無駄な往復になる。他サイトでも Jina がログインウォールで失敗したら即フォールバックへ切り替える。
+
 ## 既知のブロックサイト
 
 r.jina.ai・fetch-page.js の両方が困難なサイト: WebMD, Cleveland Clinic, Healthline, Planned Parenthood
