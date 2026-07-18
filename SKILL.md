@@ -54,9 +54,25 @@ JS レンダリング不要のシンプルな HTML サイトのみ有効。
 
 複数 URL を同時取得する場合は Agent subagent を並列で起動する。
 
+## Twitter/X は fxtwitter API を使う（Jina・fetch-page.js より先）
+
+X（`x.com` / `twitter.com`）はログインウォールで r.jina.ai が失敗し、fetch-page.js でもログイン画面の断片しか取れないことがある。**最初から fxtwitter API を使う**:
+
+```bash
+curl -s 'https://api.fxtwitter.com/{user}/status/{id}'
+```
+
+レスポンス JSON に本文・画像 URL・引用・リプライ先・**X Article 全文**（`article.content.blocks`）まで全て含まれる。
+
+- **画像**: JSON の画像 URL を `curl -sL "{image_url}" -o <scratchpad>/tweet.jpg` で保存し、Read ツールで閲覧する
+- **フォールバック**（fxtwitter が HTTP エラー・空レスポンスの場合）: oEmbed `curl -s 'https://publish.twitter.com/oembed?url=https://x.com/{user}/status/{id}'` → それでも駄目なら fetch-page.js（Agent 経由）→ ユーザーに内容の共有を依頼
+- **やってはいけない**: x.com を直接フェッチ（ログインウォール）／nitter・xcancel 等の代替フロントエンド（X Article 非対応）／Web 検索で X Article 本文を探す（インデックスされにくい）／複数の手段を順に試して時間を浪費する（fxtwitter → oEmbed → fetch-page.js → ユーザー、の順で止める）
+
+> このセクションが X 取得の正典。プロジェクト側のルール（docs / pokeca の `x-content-fetching.md`）はここへの参照。
+
 ## Jina を最初からスキップするサイト
 
-Twitter/X（`x.com` / `twitter.com`）はログインウォールで r.jina.ai が失敗するのが既知。**Jina を試さず、最初からフォールバック（fetch-page.js を Agent 経由）を使う**——失敗してから切り替えるのは無駄な往復になる。他サイトでも Jina がログインウォールで失敗したら即フォールバックへ切り替える。
+上記の X のほか、Jina がログインウォールで失敗するサイトは失敗してから切り替えず、最初からフォールバック（fetch-page.js を Agent 経由）を使う。
 
 ## 既知のブロックサイト
 
