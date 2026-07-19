@@ -68,7 +68,7 @@ curl -s 'https://api.fxtwitter.com/{user}/status/{id}'
 - **フォールバック**（fxtwitter が HTTP エラー・空レスポンスの場合）: oEmbed `curl -s 'https://publish.twitter.com/oembed?url=https://x.com/{user}/status/{id}'` → それでも駄目なら fetch-page.js（Agent 経由）→ ユーザーに内容の共有を依頼
 - **やってはいけない**: x.com を直接フェッチ（ログインウォール）／nitter・xcancel 等の代替フロントエンド（X Article 非対応）／Web 検索で X Article 本文を探す（インデックスされにくい）／複数の手段を順に試して時間を浪費する（fxtwitter → oEmbed → fetch-page.js → ユーザー、の順で止める）
 
-> このセクションが X 取得の正典。プロジェクト側のルール（docs / pokeca の `x-content-fetching.md`）はここへの参照。
+> このセクションが X 取得の正典。利用側プロジェクトに X 取得ルールを置く場合は、内容を複製せずここへの参照にする。
 
 ## Jina を最初からスキップするサイト
 
