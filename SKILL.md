@@ -64,7 +64,7 @@ curl -s 'https://api.fxtwitter.com/{user}/status/{id}'
 
 レスポンス JSON に本文・画像 URL・引用・リプライ先・**X Article 全文**（`article.content.blocks`）まで全て含まれる。
 
-- **画像**: JSON の画像 URL を `curl -sL "{image_url}" -o <scratchpad>/tweet.jpg` で保存し、Read ツールで閲覧する
+- **画像**: 本文の理解に画像が要らないなら**保存しない**。要るときは JSON の画像 URL を `curl -sL "{image_url}" -o <scratchpad>/tweet.jpg` で保存する。⚠ **保存した画像を自分で開いて「何が写っているか」を判定しない。パスを利用者に示して尋ねる。** 画像の読み取りをフックで禁じている環境では、開こうとしても拒否されて必ず失敗する
 - **フォールバック**（fxtwitter が HTTP エラー・空レスポンスの場合）: oEmbed `curl -s 'https://publish.twitter.com/oembed?url=https://x.com/{user}/status/{id}'` → それでも駄目なら fetch-page.js（Agent 経由）→ ユーザーに内容の共有を依頼
 - **やってはいけない**: x.com を直接フェッチ（ログインウォール）／nitter・xcancel 等の代替フロントエンド（X Article 非対応）／Web 検索で X Article 本文を探す（インデックスされにくい）／複数の手段を順に試して時間を浪費する（fxtwitter → oEmbed → fetch-page.js → ユーザー、の順で止める）
 
