@@ -82,6 +82,42 @@ curl -s 'https://api.fxtwitter.com/{user}/status/{id}'
 
 > このセクションが X 取得の正典。利用側プロジェクトに X 取得ルールを置く場合は、内容を複製せずここへの参照にする。
 
+## Reddit は RSS で読む（1分おき）
+
+Reddit は `.json`・old.reddit・r.jina.ai・fetch-page.js のどれも「network policy」の 403 で断られる。
+ログイン無しで通るのは RSS（Atom）だけなので、最初から RSS を使う。
+
+```bash
+# 検索（subreddit の中）
+curl -s -A '<用途が分かる User-Agent>' 'https://www.reddit.com/r/{sub}/search.rss?q={語+語}&restrict_sr=on&sort=relevance&t=year&limit=50'
+# 投稿とコメント（最初の entry が投稿の本文、残りがコメント）
+curl -s -A '<用途が分かる User-Agent>' 'https://www.reddit.com/r/{sub}/comments/{id}/{slug}/.rss?limit=200'
+```
+
+- **1分おきに取る**: 続けて取ると、エラーにならずに**中身が0バイト**で返る。15秒おきでも半分以上が空だった。0バイトなら失敗として、1分待って取り直す
+- 本数が多いときは、間隔を空けたループを裏で走らせ、その間にほかの作業をする
+- Atom の `entry` ごとに `author/name`・`updated`・`content`（HTML）がある。`content` のタグを外して読む
+- **やってはいけない**: ユーザーのアカウントでのログインや API の登録（ユーザーが求めたときだけ）／保存庫の pullpush.io（エージェントへの無料の取得を断ると明記している）
+
+## YouTube は yt-dlp で字幕とコメントを取る
+
+動画の中身は字幕で、視聴者の声はコメントで読む。どちらもログインは要らない。
+
+```bash
+# 字幕（自動字幕を含む）。元の言語の自動字幕は '<言語>-orig'
+yt-dlp --js-runtimes node --write-auto-subs --write-subs --sub-langs 'en-orig' --sub-format vtt --skip-download --sleep-requests 3 --sleep-subtitles 5 -o '<置き場>/v-%(id)s' '<URL>'
+# コメント（返信は parent が親コメントの id）
+yt-dlp --js-runtimes node --write-comments --skip-download --extractor-args 'youtube:max_comments=300' -o '<置き場>/c-%(id)s' '<URL>'
+# 検索（新しい順）。ytsearchdate: は使えない版がある
+yt-dlp --js-runtimes node --flat-playlist --print '%(id)s | %(duration)s | %(channel)s | %(title)s' 'https://www.youtube.com/results?search_query={語+語}&sp=CAI%253D'
+```
+
+- **`--js-runtimes node` を必ず付ける**: 既定では deno しか探さず、無いと字幕の取得が途中で止まり、字幕のファイルが作られない
+- **字幕の言語は1つに絞る**: 2つ目の言語で 429（取りすぎ）が返りやすい
+- 終了コードが 0 でなくても、1つ目の言語の字幕は書けていることがある。ファイルの有無で確かめる
+- 自動字幕の vtt は、同じ行が次の区切りでも繰り返される。続けて同じ行は1つにまとめて読む
+- コメントは `<置き場>/c-<id>.info.json` の `comments` に入る。`like_count` で重みを見る
+
 ## Jina を最初からスキップするサイト
 
 上記の X のほか、Jina がログインウォールで失敗するサイトは失敗してから切り替えず、最初からフォールバック（fetch-page.js を Agent 経由）を使う。
@@ -97,3 +133,4 @@ r.jina.ai・fetch-page.js の両方が困難なサイト: WebMD, Cleveland Clini
 - `curl` — Windows 11 に標準搭載
 - Google Chrome — fetch-page.js が標準パスで自動検出
 - `puppeteer-core` + `turndown` — `scripts/` 内で `npm install`
+- `yt-dlp` と Node.js — YouTube の字幕とコメントを取るときだけ
