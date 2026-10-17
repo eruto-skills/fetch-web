@@ -20,7 +20,7 @@ Web ページのコンテンツを Markdown で取得する共通フェッチユ
 
 - `curl` — Windows 11 標準搭載
 - Google Chrome — fetch-page.js が標準パスで自動検出
-- `puppeteer-core` + `turndown` — `npm install` in `scripts/`
+- `puppeteer-core` + `turndown` — `npm install` in `scripts/`（Node.js 22.12 以上）
 
 ## License
 

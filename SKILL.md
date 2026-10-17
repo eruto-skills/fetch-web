@@ -50,7 +50,7 @@ Claude専用の Agent(subagent_type=...) をCodexに送らない。
 
 r.jina.ai が失敗した場合（レート制限、Jina がブロックされるサイト等）に使う。ローカルの Chrome でレンダリングするため、セッション不要の JS ヘビーサイトに有効。
 
-依存: Google Chrome（標準パスを自動検出）、puppeteer-core + turndown（`npm install` in `scripts/`）
+依存: Google Chrome（標準パスを自動検出）、Node.js 22.12 以上、puppeteer-core + turndown（`npm install` in `scripts/`）
 
 ### 3. direct curl（最終手段）
 
@@ -132,5 +132,5 @@ r.jina.ai・fetch-page.js の両方が困難なサイト: WebMD, Cleveland Clini
 
 - `curl` — Windows 11 に標準搭載
 - Google Chrome — fetch-page.js が標準パスで自動検出
-- `puppeteer-core` + `turndown` — `scripts/` 内で `npm install`
+- `puppeteer-core` + `turndown` — `scripts/` 内で `npm install`（Node.js 22.12 以上。puppeteer-core 25 の要件）
 - `yt-dlp` と Node.js — YouTube の字幕とコメントを取るときだけ
